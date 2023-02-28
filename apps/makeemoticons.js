@@ -1,6 +1,5 @@
 import { segment } from "oicq";
 import fetch from "node-fetch";
-import axios from 'axios';
 //简单应用示例
 //帮助：表情帮助
 
@@ -188,14 +187,14 @@ if (e.msg.match('表情更新')){key=e.msg.replace('表情更新', 'update_'),ta
   if (target) {
     let url = `https://api.dlut-cc.live/emoji/?flag=${flag}&qq=${e.user_id}&target=${target}&group=${e.group_id}&args=${key}&master=${master}`;
     console.log(url);
-    //let response = await fetch(url); //调用接口获取数据
-    let response = await axios.get(url, {timeout: 20000}); //调用接口获取数据
-    //const res = await response.json(); //结果json字符串转对象
-    const res = await response.data; //结果json字符串转对象
+    let res = await fetch(url); //调用接口获取数据
+    //let response = await axios.get(url, {timeout: 20000}); //调用接口获取数据
+    res = await res.json(); //结果json字符串转对象
+    //res = await response.data; //结果json字符串转对象
     if (res.success == "true") {
       await e.reply([segment.at(e.user_id), segment.image(res.url)]);
     } else {
-      await e.reply([segment.at(e.user_id), res.url]);
+      return false
     }
     return true;
   }
